@@ -49,11 +49,41 @@ socket.on("message", async (message) => {
         let ror = message.text.split(" ");
         
         let command = ror[0].toLowerCase();
-        let args = ror[1];
-        console.log(args)
+        let args = ror[1];        
 
-        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands: =search, =help, =messages, =quote`)
+        // no arg cmds
+        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands:  =help, =users, =messagecount, =search [bing search query], =messages [username], =quote [username]`)
 
+        if (command == "=users") {
+            let users = getUsers();        
+            
+            let userCount = Object.keys(users).length;                
+            return socket.emit(
+                "message",
+                `I currently know of ${userCount} users.`
+            );
+        }
+
+        if (command == "=messagecount") {
+            let users = getUsers();
+            let messageCount = 0;
+        
+            for (const userName in users) {
+                let user = users[userName];
+                if (user && user.messages) {
+                    messageCount += Object.keys(user.messages).length;
+                }
+            }
+        
+            return socket.emit(
+                "message",
+                `I see ${messageCount} messages.`
+            );
+        }
+        
+        if (!args) return socket.emit("message", "No arguments. Did you type the command right?");
+
+        // yes arg cms
         if (command == "=search" ) {
             let result = await getSummarizationOfQuery(message.text);
             return socket.emit("message", result.substring(0, 500))
@@ -61,14 +91,18 @@ socket.on("message", async (message) => {
 
         if (command == "=messages" ) {
             let users = getUsers();
+            if ( !args.includes('#') ) args += "#twoblade.com";
             let user = users[args];
             console.log(users, args)
+            
             if (!user) return socket.emit("message", "couldn't find user " + args + "...")
+            
             let messages = Object.keys(user.messages).length;
             return socket.emit("message", "Found "+messages+" from user " + args)
         }
         if (command == "=quote") {
             let users = getUsers();
+            if ( !args.includes('#') ) args += "#twoblade.com";
             let user = users[args.trim()];
             if (!user) return socket.emit("message", "couldn't find user " + args + "...");
         
@@ -88,6 +122,19 @@ socket.on("message", async (message) => {
     process.on('exit', function(){ 
         socket.emit("message", "process exited.");
         saveMessages();
+        process.exit()
+    });
+
+    process.on('SIGINT',  function(){ 
+        socket.emit("message", "process exited by user.");
+        saveMessages();
+        process.exit()
+    });
+
+    process.on('uncaughtException',  function(){ 
+        socket.emit("message", "unexpected exception - exiting.");
+        saveMessages();
+        process.exit(1)
     });
 });
 
