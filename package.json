@@ -8,8 +8,6 @@
     "socket.io-client": "^4.8.1"
   },
   "scripts": {
-    "env": "node --env-file .env",
-    "run": "node main.js"
+    "boot": "node --env-file .env main.js"
   }
-
 }
