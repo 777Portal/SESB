@@ -2,6 +2,9 @@ import fs from 'fs/promises';
 
 let users = null;
 
+const filePath = 'users.json';
+const tempPath = 'users.tmp.json';
+
 export async function initJson() {
   try {
     const data = await fs.readFile('users.json', 'utf8');
@@ -27,14 +30,13 @@ export async function logMessage(message){
     users[message.fromUser].messages[message.id] = message;
 }
 
-export async function saveMessages(){
-  const json = JSON.stringify(users);
-  // if ( json == "" ) json = "{}"
-  fs.writeFile('users.json', json, 'utf8', (err) => {
-      if (err) {
-        console.error('Error writing file:', err);
-        return;
-      }
-      console.log('File written successfully!');
-  });
+export async function saveMessages() {
+  try {
+    const json = JSON.stringify(users);
+    await fs.writeFile(tempPath, json, 'utf8');
+    await fs.rename(tempPath, filePath);
+    console.log('File written successfully!');
+  } catch (err) {
+    console.error('Error writing file:', err);
+  }
 }
