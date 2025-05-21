@@ -4,7 +4,7 @@ let token;
 if (!process.env.PLAYWRIGHT){
     token = process.env.FALLBACK_TOKEN
 } else {
-    token = await getToken(process.env.USERNAME, process.env.PASSWORD);
+    token = await getToken(process.env.NAME, process.env.PASSWORD);
 }
 
 import { getUsers, initJson, logMessage, saveMessages } from "./features/logger.js";
