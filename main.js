@@ -52,7 +52,7 @@ socket.on("message", async (message) => {
         let args = ror[1];        
 
         // no arg cmds
-        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands:  =help, =users, =messagecount, =search [bing search query], =messages [username], =quote [username]`)
+        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands:  =help, =users, =messagecount, =search [bing search query], =messages [username], =quote [username], =firstseen [username]`)
 
         if (command == "=users") {
             let users = getUsers();        
@@ -116,6 +116,22 @@ socket.on("message", async (message) => {
             return socket.emit(
                 "message",
                 `${randomMessage.text} - ${randomMessage.fromUser} (${formattedDate})`
+            );
+        }
+
+        if (command == "=firstseen") {
+            let users = getUsers();
+            if ( !args.includes('#') ) args += "#twoblade.com";
+            let user = users[args.trim()];
+            if (!user) return socket.emit("message", "I haven't seen " + args + " yet!");
+        
+            let messageIds = Object.keys(user.messages);
+            let randomMessage = user.messages[ messageIds[0] ];
+        
+            let formattedDate = new Date(randomMessage.timestamp).toString();
+            return socket.emit(
+                "message",
+                `I first saw ${randomMessage.fromUser} @${formattedDate}... They said ${randomMessage.text}!`
             );
         }
     }
