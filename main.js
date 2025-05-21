@@ -53,7 +53,12 @@ socket.on("message", async (message) => {
     logMessage(message);
     
     console.log(message);
-    if (message.text.includes("=")) {
+    if ( message.text.includes(":") ) { 
+        let message = message.text.split(":")[1];
+        message.text = message.substring(1)
+    }
+
+    if (message.text.includes("=") ) {
         let ror = message.text.split(" ");
         
         let command = ror[0].toLowerCase();
