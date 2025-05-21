@@ -23,6 +23,7 @@ const socket = io("https://twoblade.com", {
 });
 
 import { getSummarizationOfQuery } from "./features/search.js";
+import { dateDifferenceSeconds } from "./util.js";
 
 socket.on("connect_error", (err) => {
     console.log(err.message);
@@ -147,6 +148,23 @@ socket.on("message", async (message) => {
             return socket.emit(
                 "message",
                 `I first saw ${randomMessage.fromUser} @${formattedDate}... They said ${randomMessage.text}!`
+            );
+        }
+
+        if (command == "=lastseen") {
+            let users = getUsers();
+            if ( !args.includes('#') ) args += "#twoblade.com";
+            let user = users[args.trim()];
+            if (!user) return socket.emit("message", "I haven't seen " + args + " yet!");
+        
+            let messageIds = Object.keys(user.messages);
+            let lastMessage = user.messages[ messageIds[ messageIds.length ] ];
+        
+            let date = new Date(lastMessage.timestamp);
+            const difference = dateDifferenceSeconds(date, new Date()) / 60;
+            return socket.emit(
+                "message",
+                `I last saw ${lastMessage.fromUser} ${difference} minutes ago... They said ${lastMessage.text}!`
             );
         }
     }
