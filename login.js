@@ -15,10 +15,10 @@ export async function getToken(username, password){
     let cookies = await page.context().cookies();
     for (let cookie in cookies){
         let cookieObj = cookies[cookie];
-        if (cookieObj.name == "auth_token") return cookieObj.value;
         await browser.close();
+        if (cookieObj.name == "auth_token") return cookieObj.value;
     }
-
+    
     await browser.close();
     return "NO_COOKIE";
 }
