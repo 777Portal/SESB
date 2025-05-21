@@ -41,6 +41,8 @@ socket.on ("error", (err) => {
     console.log(err);
 })
 
+const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`;
+
 socket.on("message", async (message) => {
     logMessage(message);
     
@@ -53,6 +55,14 @@ socket.on("message", async (message) => {
 
         // no arg cmds
         if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands:  =help, =users, =messagecount, =search [bing search query], =messages [username], =quote [username], =firstseen [username]`)
+
+        if (command == "=?" ) { 
+            const memoryData = process.memoryUsage();
+            const heapTotal = formatMemoryUsage(memoryData.heapTotal)
+            const heapUsed = formatMemoryUsage(memoryData.heapUsed)
+
+            return socket.emit("message", `SESB REV.${revision} | (${heapUsed} / ${heapTotal})`) 
+        }
 
         if (command == "=users") {
             let users = getUsers();        
