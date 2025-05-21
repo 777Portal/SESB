@@ -13,6 +13,8 @@ const socket = io("https://twoblade.com", {
     }
 });
 
+import { getSummarizationOfQuery } from "./features/search.js";
+
 socket.on("connect_error", (err) => {
     console.log(err.message);
     console.log(err.description);
@@ -27,8 +29,16 @@ socket.on("disconnect", (reason, details) => {
     console.log(reason, details)
 });
 
-socket.on("message", (message) => {
+socket.on ("error", (err) => {
+    console.log(err);
+})
+
+socket.on("message", async (message) => {
     console.log(message);
+    if (message.text.includes("=")) { 
+        let result = await getSummarizationOfQuery(message.text);
+        socket.emit("message", result.substring(0, 500))
+    }
 });
 
 console.log('What kinda idiot would log his own token... heh...')
