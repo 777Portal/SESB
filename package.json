@@ -1,0 +1,15 @@
+{
+
+  "type": "module",
+  "dependencies": {
+    "form-data": "^4.0.2",
+    "node-fetch": "^3.3.2",
+    "playwright": "^1.52.0",
+    "socket.io-client": "^4.8.1"
+  },
+  "scripts": {
+    "env": "node --env-file .env",
+    "run": "node main.js"
+  }
+
+}
