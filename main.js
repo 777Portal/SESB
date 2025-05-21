@@ -35,9 +35,19 @@ socket.on ("error", (err) => {
 
 socket.on("message", async (message) => {
     console.log(message);
-    if (message.text.includes("=")) { 
-        let result = await getSummarizationOfQuery(message.text);
-        socket.emit("message", result.substring(0, 500))
+    if (message.text.includes("=")) {
+        let ror = message.text.split(" ");
+        
+        let command = ror[0].toLowerCase();
+        let args = ror[1];
+        console.log(args)
+
+        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands: =search, =help`)
+
+        if (command == "=search" ) {
+            let result = await getSummarizationOfQuery(message.text);
+            return socket.emit("message", result.substring(0, 500))
+        }
     }
 });
 
