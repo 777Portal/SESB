@@ -1,5 +1,4 @@
 import { chromium } from 'playwright';
-import { sumarize } from './summarize.js';
 
 const userAgentStrings = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.118 Safari/537.36',
