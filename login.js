@@ -10,7 +10,7 @@ export async function getToken(username, password){
     await page.getByText('Chat').click();
     await page.waitForTimeout(5000);
 
-    await page.screenshot({ path: `./captures/capture-${Date.now()}.png`, fullPage: true });
+    await page.screenshot({ path: `./captures/login/capture-${Date.now()}.png`, fullPage: true });
 
     let cookies = await page.context().cookies();
     for (let cookie in cookies){
