@@ -161,7 +161,7 @@ socket.on("message", async (message) => {
             let lastMessage = user.messages[ messageIds[ messageIds.length - 1 ] ];
         
             let date = new Date(lastMessage.timestamp);
-            const difference = dateDifferenceSeconds(date, new Date()) / 60;
+            const difference = Math.trunc( ( dateDifferenceSeconds(date, new Date()) / 60 ) )/100;
             return socket.emit(
                 "message",
                 `I last saw ${lastMessage.fromUser} ${difference} minutes ago... They said ${lastMessage.text}!`
