@@ -158,7 +158,7 @@ socket.on("message", async (message) => {
             if (!user) return socket.emit("message", "I haven't seen " + args + " yet!");
         
             let messageIds = Object.keys(user.messages);
-            let lastMessage = user.messages[ messageIds[ messageIds.length ] ];
+            let lastMessage = user.messages[ messageIds[ messageIds.length - 1 ] ];
         
             let date = new Date(lastMessage.timestamp);
             const difference = dateDifferenceSeconds(date, new Date()) / 60;
