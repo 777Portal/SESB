@@ -100,7 +100,7 @@ socket.on("message", async (message) => {
 
         // yes arg cms
         if (command == "=search" ) {
-            let result = await getSummarizationOfQuery(message.text);
+            let result = await getSummarizationOfQuery(message.text.Remove(0,6));
             return socket.emit("message", result.substring(0, 500))
         }
 
