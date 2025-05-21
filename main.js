@@ -2,7 +2,7 @@ import { getToken } from "./login.js";
 let token = await getToken(process.env.USERNAME, process.env.PASSWORD);
 
 import { execSync } from 'child_process';
-const revision = execSync('git rev-parse HEAD').toString().trim();
+const revision = execSync('git rev-parse --short HEAD').toString().trim();
 
 import { io } from "socket.io-client";
 const socket = io("https://twoblade.com", {
@@ -20,7 +20,7 @@ socket.on("connect_error", (err) => {
 });
 
 socket.on("connect", () => {
-    socket.emit("message", "BT."+revision);
+    socket.emit("message", "REV."+revision);
 });
 
 socket.on("disconnect", (reason, details) => {
