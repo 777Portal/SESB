@@ -125,8 +125,9 @@ socket.on("message", async (message) => {
 
         // yes arg cms
         if (command == "=search" ) {
-            let result = await getSummarizationOfQuery(message.text.Remove(0,6));
-            return socket.emit("message", result.substring(0, 500))
+            // let result = await getSummarizationOfQuery(message.text.Remove(0,6));
+            // return socket.emit("message", result.substring(0, 500))
+            return socket.emit("message", "this command has been temporarly disabled due to it causing a crash. check back later!")
         }
 
         if (command == "=message" ) {
