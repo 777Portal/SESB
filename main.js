@@ -66,7 +66,7 @@ socket.on("message", async (message) => {
         let args = ror[1];        
 
         // no arg cmds
-        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands:  =help, =users, =messagecount, =search [bing search query], =messages [username], =message [username] [index], =quote [username], =firstseen [username], =lastseen [username]`)
+        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands:  =help, =users, =messagecount, =topm, =search [bing search query], =messages [username], =message [username] [index], =quote [username], =firstseen [username], =lastseen [username]`)
 
         if (command == "=?" ) { 
             const memoryData = process.memoryUsage();
@@ -102,6 +102,24 @@ socket.on("message", async (message) => {
                 `I see ${messageCount} messages.`
             );
         }
+
+        if (command === "=topm") {
+            let users = getUsers();
+        
+            let topUsers = Object.entries(users)
+                .map(([username, userObj]) => {
+                    return {
+                        username,
+                        count: Object.keys(userObj.messages).length
+                    };
+                })
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 10);
+        
+            let message = topUsers.map(u => `${u.username} - ${u.count}`).join("\n");
+            
+            return socket.emit("message", "\nTop message senders:\n" + message);
+        }
         
         if (!args) return socket.emit("message", "No arguments. Did you type the command right?");
 
@@ -130,24 +148,6 @@ socket.on("message", async (message) => {
                 "message",
                 `${message.text} - ${message.fromUser} (${formattedDate})`
             );
-        }
-
-        if (command === "=topmessages") {
-            let users = getUsers();
-        
-            let topUsers = Object.entries(users)
-                .map(([username, userObj]) => {
-                    return {
-                        username,
-                        count: Object.keys(userObj.messages).length
-                    };
-                })
-                .sort((a, b) => b.count - a.count)
-                .slice(0, 10);
-        
-            let message = topUsers.map(u => `${u.username} - ${u.count}`).join("\n");
-            
-            return socket.emit("message", "\nTop message senders:\n" + message);
         }
 
         if (command == "=messages" ) {
