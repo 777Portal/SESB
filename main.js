@@ -7,7 +7,7 @@ if (!process.env.PLAYWRIGHT){
     token = await getToken(process.env.NAME, process.env.PASSWORD);
 }
 
-import { getUsers, initJson, logMessage, saveMessages } from "./features/logger.js";
+import { getUsers, initJson, logMessage, saveMessages } from "./features/messageLogger.js";
 await initJson();
 
 import { execSync } from 'child_process';
