@@ -143,7 +143,7 @@ socket.on("message", async (message) => {
             let messages = Object.keys(user.messages).length;
             return socket.emit("message", "Found "+messages+" from user " + args)
         }
-        
+
         if (command == "=quote") {
             let users = getUsers();
             if ( !args.includes('#') ) args += "#twoblade.com";
@@ -189,10 +189,19 @@ socket.on("message", async (message) => {
             let lastMessage = user.messages[ messageIds[ messageIds.length - 1 ] ];
         
             let date = new Date(lastMessage.timestamp);
-            const difference = ( dateDifferenceSeconds(date, new Date()) / 60 ).toFixed(2);
+            let minutesAgo = dateDifferenceSeconds(date, new Date()) / 60;
+            let difference;
+            if ( minutesAgo >= 60 * 24 ){
+                difference = ( (minutesAgo / 60 / 24).toFixed(2) ) + " days"
+            } else if (minutesAgo >= 60) {
+                difference = ( (minutesAgo / 60 ).toFixed(2) ) + " hours"
+            } else {
+                difference = ( minutesAgo.toFixed(2) ) + " minutes"
+            }
+            
             return socket.emit(
                 "message",
-                `I last saw ${lastMessage.fromUser} ${difference} minutes ago... They said ${lastMessage.text}!`
+                `I last saw ${lastMessage.fromUser} ${difference} ago... They said ${lastMessage.text}!`
             );
         }
     }
