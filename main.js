@@ -66,7 +66,7 @@ socket.on("message", async (message) => {
         let args = ror[1];        
 
         // no arg cmds
-        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands:  =help, =users, =messagecount, =search [bing search query], =messages [username], =quote [username], =firstseen [username]`)
+        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands:  =help, =users, =messagecount, =search [bing search query], =messages [username], =message [username] [index], =quote [username], =firstseen [username], =lastseen [username]`)
 
         if (command == "=?" ) { 
             const memoryData = process.memoryUsage();
@@ -121,9 +121,9 @@ socket.on("message", async (message) => {
 
             let messageIds = Object.keys(user.messages);
             if ( messageIds.length === 0 ) return socket.emit("message", "No messages found for user " + args);
-            if ( messageIds.length-1 < ror[3] || ror[3] < 0) return socket.emit("message", "Invalid index... max: " + messageIds.length-1);
+            if ( messageIds.length-1 < ror[2] || ror[2] < 0) return socket.emit("message", "Invalid index... max: " + messageIds.length-1);
             
-            let message = user.messages[messageIds[ror[3]]];
+            let message = user.messages[messageIds[ror[2]]];
 
             let formattedDate = new Date(message.timestamp).toString();
             return socket.emit(
