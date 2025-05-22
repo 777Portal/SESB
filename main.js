@@ -132,6 +132,24 @@ socket.on("message", async (message) => {
             );
         }
 
+        if (command === "=topmessages") {
+            let users = getUsers();
+        
+            let topUsers = Object.entries(users)
+                .map(([username, userObj]) => {
+                    return {
+                        username,
+                        count: Object.keys(userObj.messages).length
+                    };
+                })
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 10);
+        
+            let message = topUsers.map(u => `${u.username} - ${u.count}`).join("\n");
+            
+            return socket.emit("message", "\nTop message senders:\n" + message);
+        }
+
         if (command == "=messages" ) {
             let users = getUsers();
             if ( !args.includes('#') ) args += "#twoblade.com";
