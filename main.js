@@ -111,6 +111,27 @@ socket.on("message", async (message) => {
             return socket.emit("message", result.substring(0, 500))
         }
 
+        if (command == "=message" ) {
+            let users = getUsers();
+            if (!ror[3]) return socket.emit("message", "You need an index for that!")
+            if ( !args.includes('#') ) args += "#twoblade.com";
+            
+            let user = users[args];
+            if ( !user ) return socket.emit("message", "couldn't find user " + args + "...")
+
+            let messageIds = Object.keys(user.messages);
+            if ( messageIds.length === 0 ) return socket.emit("message", "No messages found for user " + args);
+            if ( messageIds.length-1 < ror[3] || ror[3] < 0) return socket.emit("message", "Invalid index... max: " + messageIds.length-1);
+            
+            let message = user.messages[messageIds[ror[3]]];
+
+            let formattedDate = new Date(message.timestamp).toString();
+            return socket.emit(
+                "message",
+                `${message.text} - ${message.fromUser} (${formattedDate})`
+            );
+        }
+
         if (command == "=messages" ) {
             let users = getUsers();
             if ( !args.includes('#') ) args += "#twoblade.com";
