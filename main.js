@@ -113,7 +113,7 @@ socket.on("message", async (message) => {
 
         if (command == "=message" ) {
             let users = getUsers();
-            if (!ror[3]) return socket.emit("message", "You need an index for that!")
+            if (!ror[2]) return socket.emit("message", "You need an index for that!")
             if ( !args.includes('#') ) args += "#twoblade.com";
             
             let user = users[args];
@@ -143,6 +143,7 @@ socket.on("message", async (message) => {
             let messages = Object.keys(user.messages).length;
             return socket.emit("message", "Found "+messages+" from user " + args)
         }
+        
         if (command == "=quote") {
             let users = getUsers();
             if ( !args.includes('#') ) args += "#twoblade.com";
