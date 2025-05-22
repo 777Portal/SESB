@@ -53,13 +53,10 @@ const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 10
 socket.on("message", async (message) => {
     logMessage(message);
     
-    console.log(message.text.includes(":"));
     if ( message.text.includes(":") ) { 
         let split = message.text.split(":")[2];
         if (!split) return;
-        console.log(split);
         message.text = split.substring(1)
-        console.log(message.text, message.text.includes("=?"))
     }
 
     if (message.text.includes("=") ) {
