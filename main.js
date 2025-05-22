@@ -121,7 +121,7 @@ socket.on("message", async (message) => {
 
             let messageIds = Object.keys(user.messages);
             if ( messageIds.length === 0 ) return socket.emit("message", "No messages found for user " + args);
-            if ( messageIds.length-1 < ror[2] || ror[2] < 0) return socket.emit("message", "Invalid index... max: " + messageIds.length-1);
+            if ( messageIds.length-1 < ror[2] || ror[2] < 0) return socket.emit("message", `Invalid index :( max index ${messageIds.length-1}, you tried ${ror[2]}` );
             
             let message = user.messages[messageIds[ror[2]]];
 
