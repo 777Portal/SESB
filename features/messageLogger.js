@@ -21,13 +21,20 @@ export function getUsers() {
 }
 
 export async function logMessage(message){
-    // console.log(message);
+  console.log(message.fromUser + ": "+message.text);
+  if ( !users[message.fromUser] ) users[message.fromUser] = {
+    iq: message.fromIQ,
+    flags: {},
+    messages: {}
+  };
 
-    if ( !users[message.fromUser] ) users[message.fromUser] = {
-        iq: message.fromIq,
-        messages: {}
-    };
-    users[message.fromUser].messages[message.id] = message;
+  if (! users[message.fromUser].flags) {
+    users[message.fromUser].flags = {
+      "og":true
+    }
+  }
+
+  users[message.fromUser].messages[message.id] = message;
 }
 
 export async function saveMessages() {
