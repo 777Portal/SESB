@@ -40,7 +40,7 @@ export async function saveMessages() {
     const json = JSON.stringify(users);
     await fs.writeFile(tempPath, json, 'utf8');
     await fs.rename(tempPath, filePath);
-    console.log('File written successfully!');
+    // console.log('File written successfully!');
   } catch (err) {
     console.error('Error writing file:', err);
   }

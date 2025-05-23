@@ -24,7 +24,7 @@ export function formatTimeSince(timestamp){
 
 export function arrayStringFormat (array)
 {
-  console.log(array, array.toString(), array.toString().replace(",", "] ["))
+  // console.log(array, array.toString(), array.toString().replace(",", "] ["))
   let arr = array.toString();
   if (arr.toString() == '' ) return "";
   arr = arr.replace(",", "] [")

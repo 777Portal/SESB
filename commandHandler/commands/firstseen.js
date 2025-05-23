@@ -3,7 +3,6 @@ import { getSocket } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js"; 
 
 function callback(username){
-    console.log(username)
     if ( !username.includes('#') ) username += "#twoblade.com";
     
     let users = getUsers();
