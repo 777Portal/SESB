@@ -1,4 +1,9 @@
 import { getToken } from "./login.js";
+import { dateDifferenceSeconds, formatTimeSince, getRevision } from "./util.js";
+import { getUsers, initJson, logMessage, saveMessages } from "./features/messageLogger.js";
+import { initSocket } from "./socket.js";
+import { getSummarizationOfQuery } from "./features/search.js";
+import { runCommand, announceCommandHandlerReady } from "./commands/commandHandler.js";
 
 let token;
 if (!process.env.PLAYWRIGHT){
@@ -7,23 +12,10 @@ if (!process.env.PLAYWRIGHT){
     token = await getToken(process.env.NAME, process.env.PASSWORD);
 }
 
-import { getUsers, initJson, logMessage, saveMessages } from "./features/messageLogger.js";
 await initJson();
 
-import { execSync } from 'child_process';
-const revision = execSync('git rev-parse --short HEAD').toString().trim();
-
-import { io } from "socket.io-client";
-const socket = io("https://twoblade.com", {
-    path: "/ws/socket.io/",
-    "transports": ['websocket'],
-    auth: {
-        token
-    }
-});
-
-import { getSummarizationOfQuery } from "./features/search.js";
-import { dateDifferenceSeconds } from "./util.js";
+const revision = getRevision();
+let socket = initSocket(token);
 
 socket.on("connect_error", (err) => {
     console.log(err.message);
@@ -38,6 +30,7 @@ setInterval(() => {
 socket.on("connect", () => {
     if (process.env.DEBUG) return;
     socket.emit("message", "REV."+revision+" | =help");
+    announceCommandHandlerReady();
 });
 
 socket.on("disconnect", (reason, details) => {
@@ -50,8 +43,10 @@ socket.on ("error", (err) => {
 
 const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`;
 
+
 socket.on("message", async (message) => {
     logMessage(message);
+    runCommand(message);
     
     if ( message.text.includes(":") ) { 
         let split = message.text.split(":")[2];
@@ -64,9 +59,6 @@ socket.on("message", async (message) => {
         
         let command = ror[0].toLowerCase();
         let args = ror[1];        
-
-        // no arg cmds
-        if (command == "=help" ) return socket.emit("message", `SESB REV.${revision} | current commands:  =help, =users, =messagecount, =topm, =search [bing search query], =messages [username], =message [username] [index], =quote [username], =firstseen [username], =lastseen [username]`)
 
         if (command == "=?" ) { 
             const memoryData = process.memoryUsage();
@@ -126,6 +118,7 @@ socket.on("message", async (message) => {
         // yes arg cms
         if (command == "=search" ) {
             // let result = await getSummarizationOfQuery(message.text.Remove(0,6));
+            // console.log(result)
             // return socket.emit("message", result.substring(0, 500))
             return socket.emit("message", "this command has been temporarly disabled due to it causing a crash. check back later!")
         }
@@ -207,16 +200,7 @@ socket.on("message", async (message) => {
             let messageIds = Object.keys(user.messages);
             let lastMessage = user.messages[ messageIds[ messageIds.length - 1 ] ];
         
-            let date = new Date(lastMessage.timestamp);
-            let minutesAgo = dateDifferenceSeconds(date, new Date()) / 60;
-            let difference;
-            if ( minutesAgo >= 60 * 24 ){
-                difference = ( (minutesAgo / 60 / 24).toFixed(2) ) + " days"
-            } else if (minutesAgo >= 60) {
-                difference = ( (minutesAgo / 60 ).toFixed(2) ) + " hours"
-            } else {
-                difference = ( minutesAgo.toFixed(2) ) + " minutes"
-            }
+            let difference = formatTimeSince(lastMessage.timestamp);
             
             return socket.emit(
                 "message",
@@ -231,8 +215,9 @@ socket.on("message", async (message) => {
     });
 
     process.on('SIGINT',  function(){ 
-        socket.emit("message", "process exited by user.");
+        if (process.env.DEBUG) return process.exit();
         saveMessages();
+        socket.emit("message", "process exited by user.");
         process.exit()
     });
 
