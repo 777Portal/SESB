@@ -3,7 +3,7 @@ import { dateDifferenceSeconds, formatTimeSince, getRevision } from "./util.js";
 import { getUsers, initJson, logMessage, saveMessages } from "./features/messageLogger.js";
 import { initSocket } from "./socket.js";
 import { getSummarizationOfQuery } from "./features/search.js";
-import { runCommand, announceCommandHandlerReady } from "./commandHandler/commandHandler.js";
+import { runCommand } from "./commandHandler/commandHandler.js";
 
 let token;
 if (!process.env.PLAYWRIGHT){
@@ -26,7 +26,6 @@ socket.on("connect_error", (err) => {
 socket.on("connect", () => {
     if (process.env.DEBUG) return;
     socket.emit("message", "REV."+revision+" | =help");
-    announceCommandHandlerReady();
 });
 
 socket.on("disconnect", (reason, details) => {
