@@ -19,6 +19,12 @@ export function getCommands(){
 
 export function runCommand(message)
 {
+    if ( message.text.includes(":") ) { 
+        let split = message.text.split(":")[2];
+        if (!split) return;
+        message.text = split.substring(1)
+    }
+
     for (let command of commands ){
         let status = command.matches(message);
         if ( !status ) continue;

@@ -42,12 +42,6 @@ socket.on("message", async (message) => {
     logMessage(message);
     runCommand(message);
     
-    // if ( message.text.includes(":") ) { 
-    //     let split = message.text.split(":")[2];
-    //     if (!split) return;
-    //     message.text = split.substring(1)
-    // }
-
     // yes arg cms
     // if (command == "=search" ) {
     //     let result = await getSummarizationOfQuery(message.text.Remove(0,6));
