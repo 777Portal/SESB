@@ -2,6 +2,7 @@ import { Command } from "../commandConstructor.js";
 import { getSocket } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js";
 import { getRevision, getCurrentRevision, getGitLogByHash, exec } from "../../util.js";
+import { getCommands } from "../commandHandler.js";
 
 async function callback(string, message){
     try {
