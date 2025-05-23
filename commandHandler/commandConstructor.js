@@ -53,7 +53,8 @@ export class Command {
 
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;           
             if ( this.args.length !== providedArgs.length ) return {matches:false, feedback:`incorrect length of arguments. correct usage ( ${this.prefix}${cmd}${arrayStringFormat(this.args)} )`};
-            if ( user?.permissions?.[this.name]?.banned == true ) return {matches:false, feedback:`You are barred from using the command [${this.name}]`};
+            if ( user?.permissions?.["banned"] == true ) return {matches:false, feedback:`You are barred from commands.`};
+            if ( user?.permissions?.[this.name+".banned"] == true ) return {matches:false, feedback:`You are barred from using the command [${this.name}]`};
             
             let permsCheck = this.checkPermissions(message.fromUser);
             if ( !permsCheck.matches ) return permsCheck;
