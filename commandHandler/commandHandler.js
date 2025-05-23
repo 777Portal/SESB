@@ -16,12 +16,12 @@ export function getCommands(){
     return commands;
 }
 
-export function runCommand(string)
+export function runCommand(message)
 {
     for (let command of commands ){
-        let status = command.matches(string);
+        let status = command.matches(message);
         if ( !status ) continue;
-        if ( status.matches ) return command.run(...status.arguments)
+        if ( status.matches ) return command.run(...status.arguments, message)
         if ( status.feedback ) return getSocket()?.emit("message", status.feedback);
         console.log("reached end of runcommand with no handler", (status.feedback), (command.status), status, !status )
     }
