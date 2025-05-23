@@ -24,7 +24,7 @@ socket.on("connect_error", (err) => {
     console.log(err.description);
     console.log(err.context);
 });
-    
+
 socket.on("connect", () => {
     if (process.env.DEBUG) return;
     socket.emit("message", "REV."+revision+" | =help");
@@ -48,11 +48,11 @@ socket.on("message", async (message) => {
     //     message.text = split.substring(1)
     // }
 
-    // // yes arg cms
+    // yes arg cms
     // if (command == "=search" ) {
-    //     // let result = await getSummarizationOfQuery(message.text.Remove(0,6));
+    //     let result = await getSummarizationOfQuery(message.text.Remove(0,6));
     //     // console.log(result)
-    //     // return socket.emit("message", result.substring(0, 500))
+    //     return socket.emit("message", result.substring(0, 500))
     //     return socket.emit("message", "this command has been temporarly disabled due to it causing a crash. check back later!")
     // }
     process.on('exit', function(){ 
@@ -69,10 +69,13 @@ socket.on("message", async (message) => {
         process.exit()
     });
 
-    process.on('uncaughtException',  function(){ 
-        socket.emit("message", "unexpected exception - exiting.");
+    process.on('uncaughtException', function (err) {
+        console.error("Uncaught Exception:", err);
+        if (socket && socket.emit) {
+            socket.emit("message", "Unexpected exception ("+err+") - exiting.");
+        }
         saveMessages();
-        process.exit(1)
+        process.exit(1);
     });
 });
 
