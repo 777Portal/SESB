@@ -10,7 +10,7 @@ import { topmessages } from "./commands/topmessages.js";
 import { messagecount } from "./commands/messagecount.js";
 import { users } from "./commands/users.js";
 
-let commands = [help, debug, seen, firstSeen, quote, messages, message, topmessages, messagecount, users];
+let commands = [help, debug, users, messagecount, topmessages, seen, firstSeen, quote, messages, message];
 
 export function getCommands(){
     return commands;
