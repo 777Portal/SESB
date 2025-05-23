@@ -28,7 +28,7 @@ export class Command {
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;           
             if ( this.args.length !== providedArgs.length ) return {matches:false, feedback:`incorrect length of arguments. ${this.prefix}${cmd}${arrayStringFormat(this.args)}`};
 
-            return {matches: true, arguments: trimmed.substring(cmd.length).split(' ')};
+            return {matches: true, arguments: trimmed.substring(cmd.length).trim().split(' ')};
         }
 
         return false;
