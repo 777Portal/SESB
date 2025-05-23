@@ -9,8 +9,9 @@ import { message } from "./commands/message.js";
 import { topmessages } from "./commands/topmessages.js";
 import { messagecount } from "./commands/messagecount.js";
 import { users } from "./commands/users.js";
+import { permision } from "./commands/perm.js";
 
-let commands = [help, debug, users, messagecount, topmessages, seen, firstSeen, quote, messages, message];
+let commands = [help, debug, users, messagecount, topmessages, seen, firstSeen, quote, messages, message, permision];
 
 export function getCommands(){
     return commands;
