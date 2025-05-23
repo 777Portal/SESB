@@ -24,14 +24,12 @@ export async function logMessage(message){
   console.log(message.fromUser + ": "+message.text);
   if ( !users[message.fromUser] ) users[message.fromUser] = {
     iq: message.fromIQ,
-    flags: {},
+    permissions: {},
     messages: {}
   };
 
-  if (! users[message.fromUser].flags) {
-    users[message.fromUser].flags = {
-      "og":true
-    }
+  if (! users[message.fromUser].permissions) {
+    users[message.fromUser].permissions = {}
   }
 
   users[message.fromUser].messages[message.id] = message;
