@@ -17,7 +17,7 @@ export const loadstring = new Command(
     "loadstring",
     "Loads string.",
     ["ls", "eval", "s"],
-    ["string"],
+    [],
     callback,
     { "loadstring": { hard:true } }
 );
