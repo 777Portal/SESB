@@ -14,6 +14,30 @@ export class Command {
     toString (){
         return `${this.prefix}${this.name} ${arrayStringFormat(this.args)}`
     }
+    checkPermissions(username){
+        let user = getUsers()[username]
+        let hasAtLeastOnePerm = false;
+
+        for (let perm in this.permissions) {
+          const isHard = this.permissions[perm]?.hard === true;
+          const userHasPerm = user?.permissions?.[perm];
+        
+          if (isHard && !userHasPerm) {
+            return { matches: false, feedback: `You do not have the permissions to use [${this.name}]` };
+          }
+
+          if (userHasPerm) {
+            hasAtLeastOnePerm = true;
+            continue; 
+          }        
+        }
+        
+        if (!hasAtLeastOnePerm && Object.keys(this.permissions).length > 0) {
+          return { matches: false, feedback: `You do not have any of the required permissions to use [${this.name}]`};
+        }
+
+        return { matches: true }
+    }
     matches (message){
         let user = getUsers()[message.fromUser]
         
@@ -31,25 +55,9 @@ export class Command {
             if ( this.args.length !== providedArgs.length ) return {matches:false, feedback:`incorrect length of arguments. correct usage ( ${this.prefix}${cmd}${arrayStringFormat(this.args)} )`};
             if ( user?.permissions?.[this.name]?.banned == true ) return {matches:false, feedback:`You are barred from using the command [${this.name}]`};
             
-            let hasAtLeastOnePerm = false;
-            for (let perm in this.permissions) {
-              const isHard = this.permissions[perm]?.hard === true;
-              const userHasPerm = user?.permissions?.[perm];
+            let permsCheck = this.checkPermissions(message.fromUser);
+            if ( !permsCheck.matches ) return permsCheck;
             
-              if (isHard && !userHasPerm) {
-                return { matches: false, feedback: `You do not have the permissions to use [${this.name}]` };
-              }
-
-              if (userHasPerm) {
-                hasAtLeastOnePerm = true;
-                continue; 
-              }        
-            }
-            
-            if (!hasAtLeastOnePerm && Object.keys(this.permissions).length > 0) {
-              return { matches: false, feedback: `You do not have any of the required permissions to use [${this.name}]`};
-            }
-
             return {matches: true, arguments: trimmed.substring(cmd.length).trim().split(' ')};
         }
 
