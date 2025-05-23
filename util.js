@@ -10,7 +10,7 @@ export function formatTimeSince(timestamp){
   let date = new Date(timestamp);
   let minutesAgo = dateDifferenceSeconds(date, new Date()) / 60;
   let difference = -1;
-  
+
   if ( minutesAgo >= 60 * 24 ){
     difference = ( (minutesAgo / 60 / 24).toFixed(2) ) + " days"
   } else if (minutesAgo >= 60) {
@@ -43,4 +43,9 @@ export function getCurrentRevision()
 {
   const revision = execSync('git rev-parse --short HEAD').toString().trim();
   return revision
+}
+
+export function getGitLogByHash(hash){
+  const gitLog = execSync(`git log -1 --pretty=format:"%s, %ai" ${hash};`).toString().trim();
+  return gitLog;
 }
