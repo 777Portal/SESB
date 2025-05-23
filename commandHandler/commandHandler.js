@@ -1,8 +1,9 @@
 import { help } from "./commands/help.js";
 import { debug } from "./commands/debug.js";
+import { seen } from "./commands/lastseen.js";
 import { getSocket } from "../socket.js";
 
-let commands = [help, debug];
+let commands = [help, debug, seen];
 
 export function announceCommandHandlerReady() {
     const socket = getSocket();
