@@ -15,5 +15,6 @@ export const debug = new Command(
     "debug",
     ["?", "~", "!"],
     [],
-    callback
+    callback,
+    { "operator": { hard:true } }
 );

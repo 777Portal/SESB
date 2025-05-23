@@ -13,6 +13,8 @@ if (!process.env.PLAYWRIGHT){
 }
 
 await initJson();
+getUsers()[process.env.OPERATOR].permissions ??= {};
+getUsers()[process.env.OPERATOR].permissions.operator = true;
 
 const revision = getRevision();
 let socket = initSocket(token);
@@ -22,7 +24,7 @@ socket.on("connect_error", (err) => {
     console.log(err.description);
     console.log(err.context);
 });
-
+    
 socket.on("connect", () => {
     if (process.env.DEBUG) return;
     socket.emit("message", "REV."+revision+" | =help");
