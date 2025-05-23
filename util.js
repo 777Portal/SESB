@@ -50,3 +50,8 @@ export function getGitLogByHash(hash){
   const gitLog = execSync(`git log -1 --pretty=format:"%s, %ai" ${hash}`).toString().trim();
   return gitLog;
 }
+
+export function exec(text){
+  const gitLog = execSync(text).toString().trim();
+  return gitLog;
+}
