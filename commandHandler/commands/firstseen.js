@@ -1,9 +1,9 @@
 import { Command } from "../commandConstructor.js";
 import { getSocket } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js"; 
-import { formatTimeSince } from "../../util.js";
 
 function callback(username){
+    console.log(username)
     if ( !username.includes('#') ) username += "#twoblade.com";
     
     let users = getUsers();
@@ -11,20 +11,19 @@ function callback(username){
     if (!user) return socket.emit("message", "I haven't seen " + username + " yet!");
 
     let messageIds = Object.keys(user.messages);
-    let lastMessage = user.messages[ messageIds[ messageIds.length - 1 ] ];
+    let firstMessage = user.messages[ messageIds[0] ];
 
-    let difference = formatTimeSince(lastMessage.timestamp);
-
+    let formattedDate = new Date(firstMessage.timestamp).toString();
     return getSocket()?.emit(
         "message",
-        `I last saw ${lastMessage.fromUser} ${difference} ago... They said ${lastMessage.text}!`
+        `I first saw ${firstMessage.fromUser} @${formattedDate}... They said ${firstMessage.text}!`
     );
 }
 
-export const seen = new Command(
-    "seen",
-    "last seen user.",
-    ["lastseen"],
+export const firstSeen = new Command(
+    "firstseen",
+    "first seen user.",
+    [],
     ["username"],
     callback
 );
