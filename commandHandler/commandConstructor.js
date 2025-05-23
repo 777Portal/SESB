@@ -29,7 +29,7 @@ export class Command {
           if (userHasPerm) {
             hasAtLeastOnePerm = true;
             continue; 
-          }        
+          }
         }
         
         if (!hasAtLeastOnePerm && Object.keys(this.permissions).length > 0) {
@@ -58,12 +58,13 @@ export class Command {
             let permsCheck = this.checkPermissions(message.fromUser);
             if ( !permsCheck.matches ) return permsCheck;
             
-            return {matches: true, arguments: trimmed.substring(cmd.length).trim().split(' ')};
+            return { matches: true, arguments: trimmed.substring(cmd.length).trim().split(' ').filter(arg => arg !== '')};
         }
 
         return false;
     }
     run(...args) {
+        console.log("running "+this.name+" with args ", args);
         this.callback(...args);
     }
 }
