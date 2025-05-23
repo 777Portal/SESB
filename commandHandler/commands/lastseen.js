@@ -8,7 +8,7 @@ function callback(username){
     
     let users = getUsers();
     let user = users[username.trim()];
-    if (!user) return socket.emit("message", "I haven't seen " + username + " yet!");
+    if (!user) return getSocket()?.emit("message", "I haven't seen " + username + " yet!");
 
     let messageIds = Object.keys(user.messages);
     let lastMessage = user.messages[ messageIds[ messageIds.length - 1 ] ];
