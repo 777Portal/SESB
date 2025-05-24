@@ -11,8 +11,9 @@ import { messagecount } from "./commands/messagecount.js";
 import { users } from "./commands/users.js";
 import { permision } from "./commands/perm.js";
 import { loadstring } from "./commands/loadstring.js";
+import { permisions } from "./commands/permisions.js";
 
-let commands = [help, debug, users, messagecount, topmessages, seen, firstSeen, quote, messages, message, permision, loadstring];
+let commands = [help, debug, users, messagecount, topmessages, seen, firstSeen, quote, messages, message, permision, loadstring, permisions];
 
 export function getCommands(){
     return commands;
