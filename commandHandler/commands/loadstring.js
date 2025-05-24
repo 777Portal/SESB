@@ -4,10 +4,12 @@ import { getUsers } from "../../features/messageLogger.js";
 import { getRevision, getCurrentRevision, getGitLogByHash, exec } from "../../util.js";
 import { getCommands } from "../commandHandler.js";
 
-async function callback(string, message){
+async function callback(...args){
     try {
-        console.log(message.text.split("_")[1])
-        let output = await eval(message.text.split("_")[1]); // hacky because args are lowercase
+        let input = args[args.length - 1]?.text ?? "";
+        let query = input.substring(input.indexOf(" ") + 1);
+        
+        let output = await eval(query); // hacky because args are lowercase
         return getSocket()?.emit("message", "Success: "+output)
     } catch (err){
         return getSocket()?.emit("message", " Failed: "+err)
