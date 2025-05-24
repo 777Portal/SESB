@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import { closest, distance } from 'fastest-levenshtein';
 
 export function dateDifferenceSeconds(dt2, dt1) 
 {
@@ -20,6 +21,17 @@ export function formatTimeSince(timestamp){
   }
   
   return difference;
+}
+
+export function isSimilar(a, b, threshold = 5) {
+  return distance(a.toLowerCase(), b.toLowerCase()) <= threshold;
+}
+
+export function topNClosest(str, arr, n = 3) {
+  return arr
+    .map(item => ({ item, dist: distance(str, item.text) }))
+    .sort((a, b) => a.dist - b.dist)
+    .slice(0, n);
 }
 
 export function arrayStringFormat (array)
