@@ -41,36 +41,29 @@ socket.on ("error", (err) => {
 socket.on("message", async (message) => {
     logMessage(message);
     runCommand(message);
-    
-    // yes arg cms
-    // if (command == "=search" ) {
-    //     let result = await getSummarizationOfQuery(message.text.Remove(0,6));
-    //     // console.log(result)
-    //     return socket.emit("message", result.substring(0, 500))
-    //     return socket.emit("message", "this command has been temporarly disabled due to it causing a crash. check back later!")
-    // }
-    process.on('exit', function(){ 
-        if (process.env.DEBUG) return process.exit();
-        socket.emit("message", "process exited.");
-        saveMessages();
-        process.exit()
-    });
+});
 
-    process.on('SIGINT',  function(){ 
-        if (process.env.DEBUG) return process.exit();
-        saveMessages();
-        socket.emit("message", "process exited by user.");
-        process.exit()
-    });
+process.on('exit', function(){ 
+    if (process.env.DEBUG) return process.exit();
+    socket.emit("message", "process exited.");
+    saveMessages();
+    process.exit()
+});
 
-    process.on('uncaughtException', function (err) {
-        console.error("Uncaught Exception:", err);
-        if (socket && socket.emit) {
-            socket.emit("message", "Unexpected exception ("+err+") - exiting.");
-        }
-        saveMessages();
-        process.exit(1);
-    });
+process.on('SIGINT',  function(){ 
+    if (process.env.DEBUG) return process.exit();
+    saveMessages();
+    socket.emit("message", "process exited by user.");
+    process.exit()
+});
+
+process.on('uncaughtException', function (err) {
+    console.error("Uncaught Exception:", err);
+    if (socket && socket.emit) {
+        socket.emit("message", "Unexpected exception ("+err+") - exiting.");
+    }
+    saveMessages();
+    process.exit(1);
 });
 
 setInterval(() => {
