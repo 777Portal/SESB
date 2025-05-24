@@ -52,7 +52,7 @@ export class Command {
             let providedArgs = argsString.length ? argsString.split(' ') : [];
 
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;           
-            if ( this.args.length !== providedArgs.length && this.args.length !== 0 ) return {matches:false, feedback:`incorrect length of arguments. correct usage ( ${this.prefix}${cmd}${arrayStringFormat(this.args)} )`};
+            if ( this.args.length !== providedArgs.length && this.args.length !== 0 && this.args.length !== 1 ) return {matches:false, feedback:`incorrect length of arguments. correct usage ( ${this.prefix}${cmd}${arrayStringFormat(this.args)} )`};
             if ( user?.permissions?.["banned"] == true ) return {matches:false, feedback:`You are barred from commands.`};
             if ( user?.permissions?.[this.name+".banned"] == true ) return {matches:false, feedback:`You are barred from using the command [${this.name}]`};
             
