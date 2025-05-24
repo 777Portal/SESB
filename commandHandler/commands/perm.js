@@ -6,7 +6,7 @@ function callback(username, permision, value, message){
     if ( !username.includes('#') ) username += "#twoblade.com";
     
     let user = getUsers(username);
-    if (!user) return socket.emit("message", "I haven't seen " + username + " yet!");
+    if (!user) return getSocket()?.emit("message", "I haven't seen " + username + " yet!");
 
     getUsers()[username].permissions ??= {};
     getUsers()[username].permissions[permision] = (value === 'true');

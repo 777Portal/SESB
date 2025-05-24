@@ -7,7 +7,7 @@ function callback(username, index){
     
     let users = getUsers();
     let user = users[username.trim()];
-    if (!user) return socket.emit("message", "I haven't seen " + username + " yet!");
+    if (!user) return getSocket()?.emit("message", "I haven't seen " + username + " yet!");
 
     let messageIds = Object.keys(user.messages);
     if ( messageIds.length === 0 ) return getSocket()?.emit("message", "No messages found for user " + username);
