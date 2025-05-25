@@ -117,7 +117,7 @@ export class Command {
         let commandArr = [...this.aliases, this.name];
         
         for (let cmd of commandArr){
-            let argsString = trimmed.substring(cmd.length).trim();
+            let argsString = text.substring(this.prefix.length).substring(cmd.length).trim();
             let providedArgs = argsString.length ? this.splitArgs(argsString) : [];
 
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;
