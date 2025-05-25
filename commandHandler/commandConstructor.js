@@ -122,7 +122,7 @@ export class Command {
 
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;
 
-            let argsCheck = checkArguments(providedArgs);
+            let argsCheck = this.checkArguments(providedArgs);
             if ( !argsCheck.matches ) return permsCheck;
 
             let permsCheck = this.checkPermissions(message.fromUser);
