@@ -6,14 +6,16 @@ export class Command {
       this.name = name;
       this.description = description;
       this.aliases = aliases;
-      this.args = Array.isArray(args) ? args.map(x => ({ name: x, required: true, default: null })) : args;
+      this.args = Array.isArray(args) ? args.map(x => ({ name: x, required: true, default: null })) : [args];
       this.callback = callback;
       this.prefix = process.env.PREFIX;
       this.permissions = (permissions && typeof permissions === 'object') ? permissions : {};
     }
 
-    toString (){
-        return `${this.prefix}${this.name} ${arrayStringFormat(this.getArgs())}`
+    toString(verbose) {
+        const argsString = arrayStringFormat(this.getArgs())
+        const aliasString = verbose ? ` ( ${this.aliases.join(', ')} ) Desc: "${this.description}" ` : "";
+        return `${this.prefix}${this.name}${aliasString} ${argsString}`;
     }
     
     getArgs() {
@@ -117,25 +119,26 @@ export class Command {
         let commandArr = [...this.aliases, this.name];
         
         for (let cmd of commandArr){
+            let permsCheck = this.checkPermissions(message.fromUser);
+            if ( !permsCheck.matches ) return permsCheck;
+
             let argsString = text.substring(this.prefix.length).substring(cmd.length).trim();
-            let providedArgs = argsString.length ? this.splitArgs(argsString) : [];
+            let providedArgs = this.splitArgs(argsString);
 
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;
 
             let argsCheck = this.checkArguments(providedArgs);
             if ( !argsCheck.matches ) return argsCheck;
-
-            let permsCheck = this.checkPermissions(message.fromUser);
-            if ( !permsCheck.matches ) return permsCheck;
+            console.log(argsCheck.parsedArgs)
             
-            return { matches: true, arguments: this.splitArgs(argsString)};
+            return { matches: true, arguments: Object.values(argsCheck.parsedArgs)};
         }
 
         return false;
     }
 
     run(...args) {
-        console.log("running "+this.name+" with args ", args);
+        console.log("running "+this.name+" with args ", ...args);
         this.callback(...args);
     }
 }
