@@ -39,7 +39,7 @@ export function arrayStringFormat (array)
   // console.log(array, array.toString(), array.toString().replace(",", "] ["))
   let arr = array.toString();
   if (arr.toString() == '' ) return "";
-  arr = arr.replace(",", "] [")
+  arr = arr.split(',').join('] ['); 
   arr = arr + "] "
   arr = " [" + arr;
   
