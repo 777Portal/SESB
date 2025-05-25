@@ -13,7 +13,7 @@ function callback(username, permision, value, message){
 
     return getSocket()?.emit(
         "message",
-        `Granted ${username} ${permision} - ${JSON.stringify(getUsers()[username].permissions)}`
+        `${message.fromUser} ${( value === 'true' ) ? "gave" : "took away" } ${permision} from ${username}}`
     )
 }
 
