@@ -8,7 +8,7 @@ function callback(){
 
     return getSocket()?.emit(
         "message",
-        `I've see ${userCount} users!`
+        `I've seen ${userCount} users!`
     );
 }
 
