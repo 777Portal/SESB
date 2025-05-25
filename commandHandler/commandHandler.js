@@ -15,9 +15,10 @@ import { permisions } from "./commands/permisions.js";
 import { permisionSearch } from "./commands/permisionSeach.js";
 import { profile } from "./commands/profile.js";
 import { searchall } from "./commands/searchall.js";
+import { purge } from "./commands/purge.js";
 
 
-let commands = [help, debug, users, messagecount, topmessages, seen, searchall, profile, firstSeen, quote, messages, message, permision, loadstring, permisions, permisionSearch];
+let commands = [help, debug, users, messagecount, topmessages, seen, searchall, profile, firstSeen, quote, messages, message, permision, loadstring, permisions, permisionSearch, purge];
 
 export function getCommands(){
     return commands;
