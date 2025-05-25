@@ -13,7 +13,7 @@ function callback(username, permision, value, message){
 
     return getSocket()?.emit(
         "message",
-        `${message.fromUser} ${( value === 'true' ) ? "gave" : "took away" } ${permision} from ${username}}`
+        `${message.fromUser} ${( value === 'true' ) ? "gave" : "took away" } ${permision} from ${username}`
     )
 }
 
