@@ -6,19 +6,50 @@ export class Command {
       this.name = name;
       this.description = description;
       this.aliases = aliases;
-      this.args = args;
+      this.args = Array.isArray(args) ? args.map(x => ({ name: x, required: false, default: null })) : args;
       this.callback = callback;
       this.prefix = process.env.PREFIX;
       this.permissions = (permissions && typeof permissions === 'object') ? permissions : {};
     }
+
     toString (){
-        return `${this.prefix}${this.name} ${arrayStringFormat(this.args)}`
+        return `${this.prefix}${this.name} ${arrayStringFormat(getArgs())}`
     }
+    
+    getArgs() {
+        return this.args.map(x => x.name + (x.required ? '' : ' (optional)'));
+    }
+
+    checkArguments(providedArgs) {
+        if (this.args.length === 0) return { matches: true, parsedArgs: {} };
+      
+        const parsedArgs = {};
+      
+        for (let i = 0; i < this.args.length; i++) {
+            const expectedArg = this.args[i];
+            const provided = providedArgs[i];
+        
+            if (expectedArg.required && (provided === undefined || provided === null)) {
+                return {
+                    matches: false,
+                    feedback: `Incorrect usage... Correct usage: ${this.toString()}`
+                };
+            }
+        
+            if (provided !== undefined && provided !== '') {
+                parsedArgs[expectedArg.name] = provided;
+            } else {
+                parsedArgs[expectedArg.name] = expectedArg.default ?? null;
+            }
+        }
+      
+        return { matches: true, parsedArgs };
+    }
+
     checkPermissions(username){
         let user = getUsers()[username]
         let hasAtLeastOnePerm = false;
 
-        if ( user?.permissions?.["banned"] == true ) return {matches:false, feedback:`You are barred from commands.`};
         if ( user?.permissions?.[this.name+".banned"] == true ) return {matches:false, feedback:`You are barred from using the command [${this.name}]`};
 
         for (let perm in this.permissions) {
@@ -44,17 +75,41 @@ export class Command {
 
         return { matches: true }
     }
-    checkArguments(providedArgs){
-        if ( this.args.length !== providedArgs.length && this.args.length !== 0 && this.args.length !== 1 ) { 
-            return {
-                matches:false,
-                feedback:`incorrect length of arguments. correct usage ( ${this.prefix}${cmd}${arrayStringFormat(this.args)} )`
-            };
-        }  
+
+    splitArgs(input) {
+        const args = [];
+        let current = '';
+        let insideQuotes = false;
+      
+        for (let i = 0; i < input.length; i++) {
+            const char = input[i];
+      
+            if (char === '"') {
+                insideQuotes = !insideQuotes;
+                continue;
+            }
+        
+            if (char === ' ' && !insideQuotes) {
+                if (current.length > 0) {
+                    args.push(current);
+                    current = '';
+                }
+            } else {
+                current += char;
+            }
+        }
+      
+        if (current.length > 0) {
+          args.push(current);
+        }
+      
+        return args;
     }
+
     matches (message){
         let user = getUsers()[message.fromUser]
-        
+        if ( user?.permissions?.["banned"] == true ) return {matches:false, feedback:`You are barred from commands.`};
+
         const text = message.text;
         if (!text.startsWith(this.prefix)) return false;
 
@@ -63,7 +118,7 @@ export class Command {
         
         for (let cmd of commandArr){
             let argsString = trimmed.substring(cmd.length).trim();
-            let providedArgs = argsString.length ? argsString.split(' ') : [];
+            let providedArgs = argsString.length ? splitArgs(argsString) : [];
 
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;
 
@@ -78,6 +133,7 @@ export class Command {
 
         return false;
     }
+
     run(...args) {
         console.log("running "+this.name+" with args ", args);
         this.callback(...args);
