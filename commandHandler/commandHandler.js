@@ -17,7 +17,7 @@ import { profile } from "./commands/profile.js";
 import { searchall } from "./commands/searchall.js";
 
 
-let commands = [help, debug, users, messagecount, topmessages, seen, firstSeen, quote, messages, message, permision, loadstring, permisions, permisionSearch, profile, searchall];
+let commands = [help, debug, users, messagecount, topmessages, seen, searchall, profile, firstSeen, quote, messages, message, permision, loadstring, permisions, permisionSearch];
 
 export function getCommands(){
     return commands;
