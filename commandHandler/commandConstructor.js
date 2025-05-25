@@ -118,7 +118,7 @@ export class Command {
         
         for (let cmd of commandArr){
             let argsString = trimmed.substring(cmd.length).trim();
-            let providedArgs = argsString.length ? splitArgs(argsString) : [];
+            let providedArgs = argsString.length ? this.splitArgs(argsString) : [];
 
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;
 
@@ -128,7 +128,7 @@ export class Command {
             let permsCheck = this.checkPermissions(message.fromUser);
             if ( !permsCheck.matches ) return permsCheck;
             
-            return { matches: true, arguments: trimmed.substring(cmd.length).trim().split(' ').filter(arg => arg !== '')};
+            return { matches: true, arguments: this.splitArgs(argsString)};
         }
 
         return false;
