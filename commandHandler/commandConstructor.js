@@ -6,14 +6,14 @@ export class Command {
       this.name = name;
       this.description = description;
       this.aliases = aliases;
-      this.args = Array.isArray(args) ? args.map(x => ({ name: x, required: false, default: null })) : args;
+      this.args = Array.isArray(args) ? args.map(x => ({ name: x, required: true, default: null })) : args;
       this.callback = callback;
       this.prefix = process.env.PREFIX;
       this.permissions = (permissions && typeof permissions === 'object') ? permissions : {};
     }
 
     toString (){
-        return `${this.prefix}${this.name} ${arrayStringFormat(getArgs())}`
+        return `${this.prefix}${this.name} ${arrayStringFormat(this.getArgs())}`
     }
     
     getArgs() {
@@ -123,7 +123,7 @@ export class Command {
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;
 
             let argsCheck = this.checkArguments(providedArgs);
-            if ( !argsCheck.matches ) return permsCheck;
+            if ( !argsCheck.matches ) return argsCheck;
 
             let permsCheck = this.checkPermissions(message.fromUser);
             if ( !permsCheck.matches ) return permsCheck;
