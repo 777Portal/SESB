@@ -18,6 +18,9 @@ export class Command {
         let user = getUsers()[username]
         let hasAtLeastOnePerm = false;
 
+        if ( user?.permissions?.["banned"] == true ) return {matches:false, feedback:`You are barred from commands.`};
+        if ( user?.permissions?.[this.name+".banned"] == true ) return {matches:false, feedback:`You are barred from using the command [${this.name}]`};
+
         for (let perm in this.permissions) {
           const isHard = this.permissions[perm]?.hard === true;
           const userHasPerm = user?.permissions?.[perm];
@@ -33,10 +36,21 @@ export class Command {
         }
         
         if (!hasAtLeastOnePerm && Object.keys(this.permissions).length > 0) {
-          return { matches: false, feedback: `You do not have any of the required permissions to use [${this.name}]`};
+            return { 
+                matches: false, 
+                feedback: `You do not have any of the required permissions to use [${this.name}]`
+            };
         }
 
         return { matches: true }
+    }
+    checkArguments(providedArgs){
+        if ( this.args.length !== providedArgs.length && this.args.length !== 0 && this.args.length !== 1 ) { 
+            return {
+                matches:false,
+                feedback:`incorrect length of arguments. correct usage ( ${this.prefix}${cmd}${arrayStringFormat(this.args)} )`
+            };
+        }  
     }
     matches (message){
         let user = getUsers()[message.fromUser]
@@ -51,11 +65,11 @@ export class Command {
             let argsString = trimmed.substring(cmd.length).trim();
             let providedArgs = argsString.length ? argsString.split(' ') : [];
 
-            if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;           
-            if ( this.args.length !== providedArgs.length && this.args.length !== 0 && this.args.length !== 1 ) return {matches:false, feedback:`incorrect length of arguments. correct usage ( ${this.prefix}${cmd}${arrayStringFormat(this.args)} )`};
-            if ( user?.permissions?.["banned"] == true ) return {matches:false, feedback:`You are barred from commands.`};
-            if ( user?.permissions?.[this.name+".banned"] == true ) return {matches:false, feedback:`You are barred from using the command [${this.name}]`};
-            
+            if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;
+
+            let argsCheck = checkArguments(providedArgs);
+            if ( !argsCheck.matches ) return permsCheck;
+
             let permsCheck = this.checkPermissions(message.fromUser);
             if ( !permsCheck.matches ) return permsCheck;
             
