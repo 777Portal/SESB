@@ -18,7 +18,7 @@
 
   "scripts": {
 
-    "boot": "node --env-file .env main.js"
+    "boot": "node --watch --env-file .env main.js"
 
   }
 
