@@ -4,7 +4,7 @@ import { getUsers } from "../../features/messageLogger.js";
 
 function callback(){
     let users = getUsers();
-    let userCount = Object.keys(users).length;                
+    let userCount = Object.keys(users).length;
 
     return getSocket()?.emit(
         "message",
