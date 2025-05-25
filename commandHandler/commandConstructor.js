@@ -51,10 +51,11 @@ export class Command {
     checkPermissions(username){
         let user = getUsers()[username]
         let hasAtLeastOnePerm = false;
-
-        if ( user?.permissions?.[this.name+".banned"] == true ) return {matches:false, feedback:`You are barred from using the command [${this.name}]`};
-
+                
+        if ( user?.permissions?.[this.name+".banned"] === true ) return {matches:false, feedback:`You are barred from using the command [${this.name}]`};
+        
         for (let perm in this.permissions) {
+          
           const isHard = this.permissions[perm]?.hard === true;
           const userHasPerm = user?.permissions?.[perm];
         
@@ -110,26 +111,26 @@ export class Command {
 
     matches (message){
         let user = getUsers()[message.fromUser]
-        if ( user?.permissions?.["banned"] == true ) return {matches:false, feedback:`You are barred from commands.`};
 
         const text = message.text;
         if (!text.startsWith(this.prefix)) return false;
+
+        if ( user?.permissions?.["banned"] == true ) return {matches:false, feedback:`You are barred from commands.`};
 
         let trimmed = text.substring(this.prefix.length).toLowerCase();
         let commandArr = [...this.aliases, this.name];
         
         for (let cmd of commandArr){
-            let permsCheck = this.checkPermissions(message.fromUser);
-            if ( !permsCheck.matches ) return permsCheck;
-
             let argsString = text.substring(this.prefix.length).substring(cmd.length).trim();
             let providedArgs = this.splitArgs(argsString);
 
             if ( !(trimmed === cmd || trimmed.startsWith(cmd + ' ')) ) continue;
 
+            let permsCheck = this.checkPermissions(message.fromUser);
+            if ( !permsCheck.matches ) return permsCheck;
+
             let argsCheck = this.checkArguments(providedArgs);
             if ( !argsCheck.matches ) return argsCheck;
-            console.log(argsCheck.parsedArgs)
             
             return { matches: true, arguments: Object.values(argsCheck.parsedArgs)};
         }
