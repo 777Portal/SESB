@@ -4,12 +4,9 @@ import { getUsers } from "../../features/messageLogger.js";
 import { getRevision, getCurrentRevision, getGitLogByHash, exec } from "../../util.js";
 import { getCommands } from "../commandHandler.js";
 
-async function callback(...args){
-    try {
-        let input = args[args.length - 1]?.text ?? "";
-        let query = input.substring(input.indexOf(" ") + 1);
-        
-        let output = await eval(query); // hacky because args are lowercase
+async function callback(text){
+    try {        
+        let output = await eval(text);
         return getSocket()?.emit("message", "Success: "+output)
     } catch (err){
         return getSocket()?.emit("message", " Failed: "+err)
@@ -20,7 +17,7 @@ export const loadstring = new Command(
     "loadstring",
     "Loads string.",
     ["ls", "eval", "s"],
-    [],
+    ["text"],
     callback,
     { "loadstring": { hard:true } }
 );

@@ -3,10 +3,7 @@ import { getSocket } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js"; 
 import { isSimilar, topNClosest } from "../../util.js";
 
-function callback(...args){
-    let input = args[args.length - 1]?.text ?? "";
-    let query = input.substring(input.indexOf(" ") + 1);
-    
+function callback(query){
     let users = Object.values(getUsers());
     let messages = []
 
@@ -32,7 +29,7 @@ export const searchall = new Command(
     "searchall",
     "searchAll",
     ["sa", "searcha"],
-    [true],
+    ["query"],
     callback,
     {search: {}}
 );
