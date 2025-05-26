@@ -1,5 +1,5 @@
 import { Command } from "../commandConstructor.js";
-import { getSocket } from "../../socket.js";
+import { sendMessage } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js"; 
 import { isSimilar, topNClosest } from "../../util.js";
 
@@ -22,7 +22,7 @@ function callback(query){
       str += `[ ${item.text} - ${item.fromUser} (dist: ${dist}) ]\n `;
     }
     
-    getSocket()?.emit("message", `${query} \n${str}`);    
+    sendMessage("message", `${query} \n${str}`);    
 }
 
 export const searchall = new Command(

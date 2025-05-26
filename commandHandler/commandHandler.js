@@ -29,8 +29,9 @@ export function runCommand(message)
     if (message.fromUser == process.env.NAME+"#twoblade.com") return; // assuming we are on twoblade domain and that it doesn't already have it but idrw to do allat
 
     if ( message.text.includes(":") ) { 
-        let split = message.text.split(":")[2];
-        if (!split) return;
+        let split = message.text.split(":")[1];
+        if (!split) return console.log(message.text.split(":"));
+        
         message.text = split.substring(1)
     }
 

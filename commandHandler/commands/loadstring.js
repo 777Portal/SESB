@@ -1,5 +1,5 @@
 import { Command } from "../commandConstructor.js";
-import { getSocket } from "../../socket.js";
+import { sendMessage } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js";
 import { getRevision, getCurrentRevision, getGitLogByHash, exec } from "../../util.js";
 import { getCommands } from "../commandHandler.js";
@@ -7,9 +7,9 @@ import { getCommands } from "../commandHandler.js";
 async function callback(text){
     try {        
         let output = await eval(text);
-        return getSocket()?.emit("message", "Success: "+output)
+        return sendMessage("message", "Success: "+output)
     } catch (err){
-        return getSocket()?.emit("message", " Failed: "+err)
+        return sendMessage("message", " Failed: "+err)
     }
 }
 

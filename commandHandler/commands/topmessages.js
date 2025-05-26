@@ -1,5 +1,5 @@
 import { Command } from "../commandConstructor.js";
-import { getSocket } from "../../socket.js";
+import { sendMessage } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js"; 
 
 function callback(){
@@ -16,7 +16,7 @@ function callback(){
 
     let message = topUsers.map(u => `${u.username} - ${u.count}`).join("\n");
 
-    return getSocket()?.emit("message", "\nTop message senders:\n" + message);
+    return sendMessage("\nTop message senders:\n" + message);
 }
 
 export const topmessages = new Command(

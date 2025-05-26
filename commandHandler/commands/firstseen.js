@@ -1,5 +1,5 @@
 import { Command } from "../commandConstructor.js";
-import { getSocket } from "../../socket.js";
+import { sendMessage } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js"; 
 
 function callback(username){
@@ -7,14 +7,13 @@ function callback(username){
     
     let users = getUsers();
     let user = users[username.trim()];
-    if (!user) return getSocket()?.emit("message", "I haven't seen " + username + " yet!");
+    if (!user) return sendMessage("I haven't seen " + username + " yet!");
 
     let messageIds = Object.keys(user.messages);
     let firstMessage = user.messages[ messageIds[0] ];
 
     let formattedDate = new Date(firstMessage.timestamp).toString();
-    return getSocket()?.emit(
-        "message",
+    return sendMessage(
         `I first saw ${firstMessage.fromUser} @${formattedDate}... They said ${firstMessage.text}!`
     );
 }

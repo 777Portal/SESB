@@ -1,12 +1,12 @@
 import { Command } from "../commandConstructor.js";
-import { getSocket } from "../../socket.js";
+import { sendMessage } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js"; 
 
 function callback(){
     let users = getUsers();
     let userCount = Object.keys(users).length;
 
-    return getSocket()?.emit(
+    return sendMessage(
         "message",
         `I've seen ${userCount} users!`
     );

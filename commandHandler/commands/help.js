@@ -1,6 +1,6 @@
 import { Command } from "../commandConstructor.js";
 import { getCommands } from "../commandHandler.js";
-import { getSocket } from "../../socket.js";
+import { sendMessage } from "../../socket.js";
 import { getRevision, arrayStringFormat, getCurrentRevision } from "../../util.js";
 
 function helpCallback(verbose, ...args){
@@ -12,7 +12,7 @@ function helpCallback(verbose, ...args){
         if ( !command.checkPermissions(message.fromUser).matches ) continue;
         string += command.toString((verbose == 'true'))+"\n";
     }
-    getSocket()?.emit("message", string);
+    sendMessage(string);
 }
 
 export const help = new Command(

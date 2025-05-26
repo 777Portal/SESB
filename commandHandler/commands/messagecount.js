@@ -1,5 +1,5 @@
 import { Command } from "../commandConstructor.js";
-import { getSocket } from "../../socket.js";
+import { sendMessage } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js"; 
 
 function callback(){
@@ -13,8 +13,7 @@ function callback(){
         }
     }
 
-    return getSocket()?.emit(
-        "message",
+    return sendMessage(
         `I see ${messageCount} messages.`
     );
 }
