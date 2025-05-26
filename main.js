@@ -9,7 +9,7 @@ let token;
 if (!process.env.PLAYWRIGHT){
     token = process.env.FALLBACK_TOKEN
 } else {
-    token = await getToken(process.env.NAME, process.env.PASSWORD);
+    token = await getToken(process.env.NAME, process.env.PASSWORD, process.env.CF_CLEARANCE);
 }
 
 await initJson();

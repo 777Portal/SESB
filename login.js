@@ -1,24 +1,33 @@
-import { chromium } from 'playwright';
-
-export async function getToken(username, password){
-    const browser = await chromium.launch();  // Or 'firefox' or 'webkit'.
-    const page = await browser.newPage();
-    await page.goto('https://twoblade.com/login');
-    await page.fill('#username', username);
-    await page.fill('#password', password);
-    await page.click('button:has-text("Sign in")');
-    await page.getByText('Chat').click();
-    await page.waitForTimeout(5000);
-
-    await page.screenshot({ path: `./captures/login/capture-${Date.now()}.png`, fullPage: true });
-
-    let cookies = await page.context().cookies();
-    for (let cookie in cookies){
-        let cookieObj = cookies[cookie];
-        await browser.close();
-        if (cookieObj.name == "auth_token") return cookieObj.value;
-    }
+export async function getToken(username, password, cf_clearance) {
+    const url = "https://twoblade.com/login";
+  
+    const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
+        'Referer': 'https://twoblade.com/login',
+        'Origin': 'https://twoblade.com',
+        'Cookie': `cf_clearance=${cf_clearance}`
+    };
+  
+    const body = new URLSearchParams({ username, password }).toString();
+  
+    const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body,
+        redirect: 'manual'
+    });
+  
+    const setCookies = response.headers.get('set-cookie')
     
-    await browser.close();
-    return "NO_COOKIE";
-}
+    let authToken = null;
+    if (setCookies.startsWith('auth_token=')) {
+        authToken = setCookies.split(';')[0].split('=')[1];
+    }
+  
+    if (!authToken) {
+        throw new Error('auth_token cookie not found in login response :(((');
+    }
+  
+    return authToken;
+  }
