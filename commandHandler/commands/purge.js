@@ -2,24 +2,44 @@ import { Command } from "../commandConstructor.js";
 import { sendMessage } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js"; 
 
-function callback(username){
-    if ( !username.includes('#') ) username += "#twoblade.com";
-    
+function callback(userArray) {
     let users = getUsers();
-    let user = users[username.trim()];
-    if (!user) return sendMessage("I haven't seen " + username + " yet!");
+    let summary = [];
 
-    let messages = Object.keys(user.messages).length;
-    users[username.trim()].messages = {};
+    let usernames = userArray.split(" ")
 
-    return sendMessage("deleted "+messages+" from user " + username + ` ${Object.keys(users[username.trim()].messages).length })`)
+    let deleted = 0;
+    let unfound = 0;
+    let found = 0;
+
+    for (let rawUsername of usernames) {
+        let username = rawUsername.includes('#') ? rawUsername : rawUsername + "#twoblade.com";
+        username = username.trim();
+
+        let user = users[username];
+        if (!user) {
+            unfound++;
+            continue;
+        }
+
+        let messages = Object.keys(user.messages).length;
+        user.messages = {};
+
+        getUsers()[username].permissions ??= {};
+        getUsers()[username].permissions["logging.banned"] = true;
+
+        deleted += messages; 
+        found++;
+    }
+
+    return sendMessage(`Deleted ${deleted} messages from ${found} users, with ${unfound} users not being found in the json`);
 }
 
 export const purge = new Command(
     "purge",
     "purges chat history of a user",
     ["prg"],
-    ["username"],
+    ["usernames (list)"],
     callback,
     {purge: {}}
 );

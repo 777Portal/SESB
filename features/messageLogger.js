@@ -27,11 +27,13 @@ export async function logMessage(message){
     permissions: {},
     messages: {}
   };
-
+  
   if (! users[message.fromUser].permissions) {
     users[message.fromUser].permissions = {}
   }
 
+  if (users[message.fromUser].permissions["logging.banned"] == true) return;
+  
   users[message.fromUser].messages[message.id] = message;
 }
 
