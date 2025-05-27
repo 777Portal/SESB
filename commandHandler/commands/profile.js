@@ -10,10 +10,10 @@ function callback(username){
     let users = getUsers();
     console.log(users[username.trim()], username.trim())
     let user = users[username.trim()];
-    if (!user) return sendMessage("message", "I haven't seen " + username + " yet!");
+    if (!user) return sendMessage("I haven't seen " + username + " yet!");
     
     let messageIds = Object.keys(user.messages);
-    if (messageIds.length === 0) return sendMessage("message", "No messages found for user " + args);
+    if (messageIds.length === 0) return sendMessage("No messages found for user " + args);
 
     let xp = 0;
     let alreadySeen = [];

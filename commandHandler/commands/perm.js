@@ -6,13 +6,13 @@ function callback(username, permision, value, message){
     if ( !username.includes('#') ) username += "#twoblade.com";
     
     let user = getUsers()[username];
-    if (!user) return sendMessage("message", "I haven't seen " + username + " yet!");
+    if (!user) return sendMessage("I haven't seen " + username + " yet!");
 
     getUsers()[username].permissions ??= {};
     getUsers()[username].permissions[permision] = (value === 'true');
 
     return sendMessage(
-        `${message.fromUser} ${( value === 'true' ) ? "gave" : "took away" } ${permision} from ${username}`
+        `${message.fromUser} ${( value === 'true' ) ? "gave" : "took away" } ${permision} ${( value === 'true' ) ? "to" : "from" } ${username}`
     )
 }
 

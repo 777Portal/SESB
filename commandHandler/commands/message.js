@@ -10,8 +10,8 @@ function callback(username, index){
     if (!user) return sendMessage("I haven't seen " + username + " yet!");
 
     let messageIds = Object.keys(user.messages);
-    if ( messageIds.length === 0 ) return getSocket()?.emit("message", "No messages found for user " + username);
-    if ( messageIds.length-1 < index || index < 0) return getSocket()?.emit("message", `Invalid index :( max index ${messageIds.length-1}, you tried ${index}` );
+    if ( messageIds.length === 0 ) return sendMessage( "No messages found for user " + username);
+    if ( messageIds.length-1 < index || index < 0) return sendMessage(`Invalid index :( max index ${messageIds.length-1}, you tried ${index}` );
     
     let message = user.messages[messageIds[index]];
     let formattedDate = new Date(message.timestamp).toString();
