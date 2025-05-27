@@ -13,7 +13,8 @@ function callback(username, index){
     if ( messageIds.length === 0 ) return sendMessage( "No messages found for user " + username);
     if ( messageIds.length-1 < index || index < 0) return sendMessage(`Invalid index :( max index ${messageIds.length-1}, you tried ${index}` );
     
-    let message = user.messages[messageIds[index]];
+    let message = user?.messages?.[messageIds?.[index]];
+    if (!message) return sendMessage( "Message is undefined.. did you send a correct index? (number)" );
     let formattedDate = new Date(message.timestamp).toString();
     return sendMessage(
         `${message.text} - ${message.fromUser} (${formattedDate})`
