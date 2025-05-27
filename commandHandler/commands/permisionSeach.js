@@ -9,7 +9,8 @@ function callback(permissionName){
         .map(([username]) => username);
 
     if (usersWithPermission.length == 0) return sendMessage("0 users have the permision" + permissionName);
-    return sendMessage(""+usersWithPermission.length+" users have the \'"+permissionName+"\' permision. [ "+usersWithPermission.toString() + " ]");
+    console.log(usersWithPermission.toString())
+    return sendMessage(""+usersWithPermission.length+" users have the \'"+permissionName+"\' permision. \nRelevant users logged in console.");
 }
 
 export const permisionSearch = new Command(
