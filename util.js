@@ -92,3 +92,20 @@ export function similarity(a, b) {
   const maxLength = Math.max(a.length, b.length);
   return 1 - distance / maxLength;
 }
+
+export async function uploadPaste(content, language = "plain") {
+  const response = await fetch("https://api.pastes.dev/post", {
+    method: "POST",
+    headers: {
+      "Content-Type": `text/${language}`,
+    },
+    body: content
+  });
+
+  if (!response.ok) {
+    return `Failed to upload paste: ${response.status} ${response.statusText}`;
+  }
+
+  const data = await response.json();
+  return "https://pastes.dev/"+data.key;
+}
