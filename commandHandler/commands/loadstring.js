@@ -7,9 +7,9 @@ import { getCommands } from "../commandHandler.js";
 async function callback(text){
     try {        
         let output = await eval(text);
-        return sendMessage("message", "Success: "+output)
+        return sendMessage("Success: "+output)
     } catch (err){
-        return sendMessage("message", " Failed: "+err)
+        return sendMessage(" Failed: "+err)
     }
 }
 
