@@ -46,10 +46,10 @@ socket.on("message", async (message) => {
     if (message.fromUser == process.env.NAME+"#twoblade.com" || message.fromUser == "fivecord#twoblade.com") return; // assuming we are on twoblade domain and that it doesn't already have it but idrw to do allat
     if (getUsers()[message.fromUser].permissions["logging.banned"] == true) return;
 
-    let removed = message
-    delete message.fromIQ
-    delete message.id
-    delete message.timestamp
+    let removed = { ...message };
+    delete removed.fromIQ;
+    delete removed.id;
+    delete removed.timestamp;
     
     let rating = await review(JSON.stringify(removed))
     rating = JSON.parse(rating)
