@@ -48,8 +48,9 @@ export async function talk(text) {
     
     try {
         const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEYS[keyIndex] });
+
         const response = await ai.models.generateContent({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash-preview-05-20",
             contents: text,
             config: {
               systemInstruction: `
@@ -99,6 +100,57 @@ export async function talk(text) {
                 Remember: Focus on genuine engagement rather than artificial markers of casual speech. The goal is authentic dialogue, not performative informality.
 
                 Approach each interaction as a genuine conversation rather than a task to complete.
+              `,
+            },
+        });
+        
+        return response.text;
+    } catch (error) {
+        if (error.status === 429 || error.message?.includes('429')) {
+            if (GEMINI_API_KEYS)
+            console.warn(`Rate limit hit for key of index ${keyIndex}, trying next key...}`);
+            keyIndex++;
+            return;
+        };
+        if (error.response?.status === 503) { 
+            console.warn(`Model is overloaded... ${keyIndex}`);
+            return;
+        }
+        console.trace(error);
+    }
+}
+
+export async function summarize(text){
+    try {
+        const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEYS[keyIndex] });
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash-preview-05-20",
+            contents: text,
+            config: {
+              systemInstruction: `
+              You are a chat summarizer in a live chatroom. Your job is to monitor and condense the incoming messages into short summaries that capture the main topics, questions, concerns, or sentiments being shared.
+
+              For a given set of chat messages:
+              
+              Group similar or related messages together.
+              
+              Remove filler, repetition, or off-topic chatter.
+              
+              Summarize the key points or trends in 1-3 bullet points or sentences.
+              
+              Example Input:
+              user1: anyone know how to fix the login bug?  
+              user2: yeah, it's been messing up for me too  
+              user3: i think it's a backend issue  
+              user4: lol this always happens on update day  
+              
+              Example Output:
+              Multiple users are experiencing a login bug.
+              Some believe the issue is related to the backend.              
+              Frustration noted due to recurring issues after updates.
+              
+              Now summarize the following chat messages:              
               `,
             },
         });

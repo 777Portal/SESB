@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import { summarize } from '../gemma.js';
 
 let users = null;
 
@@ -20,6 +21,8 @@ export function getUsers() {
   return users;
 }
 
+export let messages = [];
+let lastSummary = [];
 export async function logMessage(message){
   console.log(message.fromUser + ": "+message.text);
   if ( !users[message.fromUser] ) users[message.fromUser] = {
@@ -34,7 +37,17 @@ export async function logMessage(message){
 
   if (users[message.fromUser].permissions["logging.banned"] == true) return;
   
+  messages.push(message);
   users[message.fromUser].messages[message.id] = message;
+
+  // if (messages.length > 20) {
+  //   lastSummary = await summarize(message.toString());
+  //   messages = [];
+  // };
+}
+
+export function getMemory(){
+  return {messages, lastSummary}
 }
 
 export async function saveMessages() {
