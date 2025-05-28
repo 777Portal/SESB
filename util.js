@@ -97,6 +97,7 @@ export async function uploadPaste(content, language = "plain") {
   const response = await fetch("https://api.pastes.dev/post", {
     method: "POST",
     headers: {
+      "User-Agent": "sesb-twoblade.com-bot/0.1",
       "Content-Type": `text/${language}`,
     },
     body: content
