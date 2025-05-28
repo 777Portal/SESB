@@ -109,3 +109,41 @@ export async function uploadPaste(content, language = "plain") {
   const data = await response.json();
   return "https://pastes.dev/"+data.key;
 }
+
+const webhookUrl = process.env.WEBHOOK
+
+export async function sendWebhook(rating, username, message, raw){
+  const payload = {
+    username: 'Bot detector',
+    content: `# ${rating} \n` +message + " " + username,
+    "embeds": [{
+      "fields": [
+        {
+          "name": "Bot",
+          "value": rating,
+          "inline": true
+        },
+        {
+          "name": username,
+          "value": message,
+          "inline": true
+        },
+        {
+          "name": "Raw",
+          "value": raw
+        },
+      ]
+    }]
+  };  
+
+  const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload),
+  });
+
+  return response
+};
+
