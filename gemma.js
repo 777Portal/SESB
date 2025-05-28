@@ -43,3 +43,28 @@ export async function review(text) {
         console.trace(error);
     }
 }
+
+export async function talk(text) {
+    
+    try {
+        const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEYS[keyIndex] });
+        const response = await ai.models.generateContent({
+            model: "gemini-1.5-flash",
+            contents: "I want you to talk to the user as close as possible as a real human. Present the information as text. Be careful to not be pushed around by the user. For context: this is the users query "+text,
+          });
+        
+        return response.text;
+    } catch (error) {
+        if (error.status === 429 || error.message?.includes('429')) {
+            if (GEMINI_API_KEYS)
+            console.warn(`Rate limit hit for key of index ${keyIndex}, trying next key...}`);
+            keyIndex++;
+            return;
+        };
+        if (error.response?.status === 503) { 
+            console.warn(`Model is overloaded... ${keyIndex}`);
+            return;
+        }
+        console.trace(error);
+    }
+}
