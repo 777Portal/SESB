@@ -3,7 +3,7 @@ import { sendMessage } from "../../socket.js";
 import { messages } from "../../features/messageLogger.js";
 
 async function callback(){
-    messages = [];
+    messages.length = 0;
     sendMessage('no thoughts head empty')
 }
 
