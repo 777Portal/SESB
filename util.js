@@ -115,7 +115,7 @@ const webhookUrl = process.env.WEBHOOK
 export async function sendWebhook(rating, username, message, raw){
   const payload = {
     username: 'Bot detector',
-    content: `# ${rating} \n` +message + " " + username,
+    content: `## ${rating} \n` +message + " " + username,
     "embeds": [{
       "fields": [
         {

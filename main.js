@@ -56,7 +56,7 @@ socket.on("message", async (message) => {
     
     console.log(rating?.rating, rating)
     let string = " ("+rating?.rating+") "  + rating.reason
-    if (rating?.rating > 4) sendWebhook(string, message.fromUser, message.text, rating.toString())
+    if (rating?.rating > 4) sendWebhook(string, message.fromUser, message.text, JSON.stringify(rating))
 });
 
 process.on('exit', function(){ 
