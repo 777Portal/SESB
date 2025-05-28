@@ -1,7 +1,7 @@
 import { Command } from "../commandConstructor.js";
 import { sendMessage } from "../../socket.js";
 import { getUsers } from "../../features/messageLogger.js";
-import { getRevision, getCurrentRevision, getGitLogByHash, exec } from "../../util.js";
+import { getRevision, getCurrentRevision, getGitLogByHash, exec, sendWebhook } from "../../util.js";
 import { getCommands } from "../commandHandler.js";
 
 async function callback(text){

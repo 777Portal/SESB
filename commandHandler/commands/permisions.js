@@ -8,7 +8,7 @@ function callback(username){
     let users = getUsers();
     let user = users[username.trim()];
     if (!user) return sendMessage("I haven't seen " + username + " yet!");
-    if (!user.permissions || Object.keys(user.permissions).length == 0) return getSocket()?.emit("message", username+" doesn't have any permisions...");
+    if (!user.permissions || Object.keys(user.permissions).length == 0) return sendMessage(username+" doesn't have any permisions...");
     return sendMessage(username+" has: "+JSON.stringify(user.permissions));
 }
 
