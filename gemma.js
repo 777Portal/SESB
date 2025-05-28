@@ -1,11 +1,10 @@
 import { GoogleGenAI, Type } from "@google/genai";
 const GEMINI_API_KEYS = JSON.parse(process.env.GEMINI_API_KEYS);
 let keyIndex = 0;
-console.log(GEMINI_API_KEYS)
 export async function review(text) {
-    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEYS[keyIndex] });
-
+    
     try {
+        const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEYS[keyIndex] });
         const response = await ai.models.generateContent({
             model: "gemini-2.0-flash",
             contents:
@@ -31,7 +30,7 @@ export async function review(text) {
     } catch (error) {
         if (error.status === 429 || error.message?.includes('429')) {
             if (GEMINI_API_KEYS)
-            console.warn(`Rate limit hit for key of index ${keyIndex}, trying next key...`);
+            console.warn(`Rate limit hit for key of index ${keyIndex}, trying next key... ${GEMINI_API_KEYS[keyIndex+1]}`);
             keyIndex++;
             return;
         };

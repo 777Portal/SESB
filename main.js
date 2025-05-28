@@ -76,10 +76,10 @@ process.on('SIGINT',  function(){
 process.on('uncaughtException', function (err) {
     console.error("Uncaught Exception:", err);
     if (socket && socket.emit) {
-        socket.emit("message", "Unexpected exception ("+err+") - exiting.");
+        socket.emit("message", "Unexpected exception ("+err+") - attempting to continue.");
     }
-    saveMessages();
-    process.exit(1);
+    // saveMessages();  
+    // process.exit(1);
 });
 
 setInterval(() => {
