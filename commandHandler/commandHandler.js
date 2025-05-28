@@ -36,6 +36,8 @@ export function runCommand(message)
         message.text = split.substring(1)
     }
 
+    message.text = message.text.replace(/[\u200B\u200C\u200D\uFEFF]/g, '');
+
     for (let command of commands ){
         let status = command.matches(message);
         if ( !status ) continue;
