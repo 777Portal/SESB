@@ -39,6 +39,6 @@ export async function review(text) {
             console.warn(`Model is overloaded... ${keyIndex}`);
             return;
         }
-        throw error;
+        console.trace(error);
     }
 }
