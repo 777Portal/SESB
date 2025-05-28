@@ -18,7 +18,7 @@ import { searchall } from "./commands/searchall.js";
 import { purge } from "./commands/purge.js";
 import { reviewCommand } from "./commands/review.js";
 import { webhook } from "./commands/webhook.js";
-import { ai } from "./commands/talk.js";
+import { ai } from "./commands/ai.js";
 
 
 let commands = [help, debug, users, messagecount, topmessages, seen, searchall, profile, firstSeen, quote, messages, message, permision, loadstring, permisions, permisionSearch, purge, reviewCommand, webhook, ai];
