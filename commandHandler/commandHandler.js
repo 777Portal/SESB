@@ -19,27 +19,27 @@ import { purge } from "./commands/purge.js";
 import { reviewCommand } from "./commands/review.js";
 import { webhook } from "./commands/webhook.js";
 import { ai } from "./commands/ai.js";
+import { clearmemory } from "./commands/clearmemory.js";
 
-
-let commands = [help, debug, users, messagecount, topmessages, seen, searchall, profile, firstSeen, quote, messages, message, permision, loadstring, permisions, permisionSearch, purge, reviewCommand, webhook, ai];
+let commands = [help, debug, users, messagecount, topmessages, seen, searchall, profile, firstSeen, quote, messages, message, permision, loadstring, permisions, permisionSearch, purge, reviewCommand, webhook, ai, clearmemory];
 
 export function getCommands(){
     return commands;
 }
 
-export function runCommand(message)
-{
+export function runCommand(message) {
     if (message.fromUser == process.env.NAME+"#twoblade.com") return; // assuming we are on twoblade domain and that it doesn't already have it but idrw to do allat
 
-    // if ( message.text.includes(":") ) { 
+    if ( message.fromUser == "fivecord#twoblade.com" || message.fromUser == "fivecord#twoblade.com"  ) { 
     //     let split = message.text.split(":")[1];
     //     if (!split) return console.log(message.text.split(":"));
         
     //     message.text = split.substring(1)
     // }
+    }
 
     message.text = message.text.replace(/[\u200B\u200C\u200D\uFEFF]/g, '');
-
+    
     for (let command of commands ){
         let status = command.matches(message);
         if ( !status ) continue;
