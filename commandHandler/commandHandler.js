@@ -39,6 +39,7 @@ export function runCommand(message) {
     }
 
     message.text = message.text.replace(/[\u200B\u200C\u200D\uFEFF]/g, '');
+    if (message.text.startsWith(':3')) return Socket.emit('message', ':3')
     
     for (let command of commands ){
         let status = command.matches(message);
