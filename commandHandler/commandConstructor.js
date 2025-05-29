@@ -87,7 +87,7 @@ export class Command {
         for (let i = 0; i < input.length; i++) {
             const char = input[i];
       
-            if (char === '"') {
+            if (char === '"' || char === "“") {
                 insideQuotes = !insideQuotes;
                 continue;
             }
