@@ -1,9 +1,7 @@
 import { MongoClient } from "mongodb";
 
 // connect to your Atlas deployment
-const uri =  "mongodb://localhost:52314/?directConnection=true";
-
-const client = new MongoClient(uri);
+const client = new MongoClient(process.env.ATLAS_CONNECTION_STRING);
 
 async function run() {
    try {
