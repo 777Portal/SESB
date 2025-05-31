@@ -20,8 +20,9 @@ import { reviewCommand } from "./commands/review.js";
 import { webhook } from "./commands/webhook.js";
 import { ai } from "./commands/ai.js";
 import { clearmemory } from "./commands/clearmemory.js";
+import { querymemory } from "./commands/mq.js";
 
-let commands = [help, debug, users, messagecount, topmessages, seen, searchall, profile, firstSeen, quote, messages, message, permision, loadstring, permisions, permisionSearch, purge, reviewCommand, webhook, ai, clearmemory];
+let commands = [help, debug, users, messagecount, topmessages, seen, searchall, profile, firstSeen, quote, messages, message, permision, loadstring, permisions, permisionSearch, purge, reviewCommand, webhook, ai, clearmemory, querymemory];
 
 export function getCommands(){
     return commands;

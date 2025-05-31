@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import { summarize } from '../gemma.js';
-
+import { insertMemory } from '../mongo/insertMemory.js';
 let users = null;
 
 const filePath = 'users.json';
@@ -40,10 +40,10 @@ export async function logMessage(message){
   messages.push(message);
   users[message.fromUser].messages[message.id] = message;
 
-  // if (messages.length > 20) {
-  //   lastSummary = await summarize(message.toString());
-  //   messages = [];
-  // };
+  if (messages.length > 20) {
+    insertMemory(await summarize(messages));
+    messages = [];
+  };
 }
 
 export function getMemory(){

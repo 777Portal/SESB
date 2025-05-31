@@ -3,3 +3,5 @@ node_modules/
 .env
 users.json
 users.tmp.json
+commandHandler/.DS_Store
+.DS_Store

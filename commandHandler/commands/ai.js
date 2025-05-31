@@ -2,6 +2,7 @@ import { talk } from "../../gemma.js";
 import { Command } from "../commandConstructor.js";
 import { sendMessage } from "../../socket.js";
 import { getMemory } from "../../features/messageLogger.js";
+import { queryMemory } from "../../mongo/query.js";
 
 async function callback(query, ...args){
     let messages = args[args.length - 1];
@@ -16,7 +17,13 @@ async function callback(query, ...args){
         return `[${time}] ${fromUser}: ${text}`;
     }).join('\n');
 
-    let string = await talk(""+message+". \nFor context, here is the chat history."+chatLog+"")
+    let longMem = await queryMemory(query);
+
+    let longMemString = JSON.stringify(longMem);
+
+    console.log('responding to message '+message + " | with long mem: "+longMemString)
+
+    let string = await talk("In addition, "+ longMemString +" \n"+message+". \nFor context, here is the chat history."+chatLog+"")
     sendMessage(string);
 }
 
